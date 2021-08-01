@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
+import os
 import json
 import requests
+import datetime
 
 # Configuration
 cryptos = ['ADA', 'BTC', 'LTC', 'ETH']
 currency = 'EUR'
+savefile = os.getenv('HOME') + '/vimwiki/crypto_data.wiki'
 
 def get_crypto_price(crypto, currency):
     ans = dict()
@@ -49,3 +52,7 @@ if __name__ == "__main__":
         resp = get_crypto_price(crypto, currency)
 
         print('{}: Buy 1 {} = {} {},\t\tSell 1 {} = {} {}'.format(resp['base'], resp['base'], resp['buy'], resp['currency'],resp['base'], resp['sell'], resp['currency']))
+
+        if savefile is not None and savefile != '':
+            with open(savefile, 'a') as f:
+                f.write('{},{},{},{},{}\n'.format(datetime.datetime.now().strftime('%x %X'),resp['base'],resp['currency'],resp['buy'],resp['sell']))
